@@ -20,7 +20,7 @@ services:
     ports:
       - "${APP_PORT:-8000}:8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -51,7 +51,7 @@ services:
     working_dir: /service
     volumes:
       - ./src/ai_service:/service
-    command: ["python", "main.py"]
+    command: ["sh","-c","pip install fastapi uvicorn pydantic requests && python main.py"]
     networks:
       - team-internal
     healthcheck:
